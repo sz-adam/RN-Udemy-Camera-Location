@@ -1,9 +1,36 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
-import { launchCameraAsync, useCameraPermissions } from 'expo-image-picker'
+import { Button, StyleSheet, Alert, View } from 'react-native'
+import { launchCameraAsync, useCameraPermissions, PermissionStatus } from 'expo-image-picker'
 import { Colors } from '../../constans/colors';
 
 const ImagePicker = () => {
+
+    const [cameraPermissionInformation, requestPermission] =
+        useCameraPermissions();
+
+    async function verifyPermissions() {
+        if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
+            const permissionResponse = await requestPermission();
+
+            return permissionResponse.granted;
+        }
+
+        if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
+            Alert.alert(
+                'Insufficient Permissions!',
+                'You need to grant camera permissions to use this app.'
+            );
+            return false;
+        }
+
+        return true;
+    }
     async function takeImageHandler() {
+
+        const hasPermission = await verifyPermissions();
+
+        if (!hasPermission) {
+            return;
+        }
         const image = await launchCameraAsync({
             allowsEditing: true,
             aspect: [16, 9],
@@ -13,8 +40,8 @@ const ImagePicker = () => {
     }
     return (
         <View>
-          <View></View>
-        <Button title="Take Image " onPress={takeImageHandler} />
+            <View></View>
+            <Button title="Take Image " onPress={takeImageHandler} />
         </View>
     );
 }
