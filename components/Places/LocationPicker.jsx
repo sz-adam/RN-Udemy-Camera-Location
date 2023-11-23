@@ -2,9 +2,15 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import OutlinedButton from '../Ui/OutlinedButton'
 import { Colors } from '../../constans/colors'
+import { getCurrentPositionAsync } from 'expo-location'
+
 
 const LocationPicker = () => {
-    function getLocationHandler() { }
+    
+    async function getLocationHandler() { 
+       const location=await getCurrentPositionAsync()
+       console.log(location)
+    }
 
     function pickOnMapHandler() { }
 
