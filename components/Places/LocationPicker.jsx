@@ -1,11 +1,17 @@
 import { StyleSheet, Alert, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import OutlinedButton from '../Ui/OutlinedButton'
 import { Colors } from '../../constans/colors'
 import { getCurrentPositionAsync, useForegroundPermissions, PermissionStatus } from 'expo-location'
+import { useNavigation } from '@react-navigation/native';
+  
 
 
 const LocationPicker = () => {
+    const [pickedLocation, setPickedLocation] = useState();
+ 
+    const navigation = useNavigation();
+
     const [locationPermissionInformation, requestPermission] = useForegroundPermissions();
     async function verifyPermissions() {
         if (
@@ -37,7 +43,9 @@ const LocationPicker = () => {
         console.log(location)
     }
 
-    function pickOnMapHandler() { }
+    function pickOnMapHandler() {
+        navigation.navigate("Map")
+     }
 
     return (
         <View>
